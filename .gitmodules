@@ -7,3 +7,6 @@
 [submodule "api-gateway"]
 	path = api-gateway
 	url = https://github.com/asidelnikoff/dnevnik-api-gateway.git
+[submodule "users-ms"]
+	path = users-ms
+	url = https://github.com/alenapoliakova/user-api.git
