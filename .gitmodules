@@ -1,0 +1,9 @@
+[submodule "schedule-ms"]
+	path = schedule-ms
+	url = https://github.com/alenkaLo/Microservice-schedule-.git
+[submodule "tasks-ms"]
+	path = tasks-ms
+	url = https://github.com/EltIsma/tasks.git
+[submodule "api-gateway"]
+	path = api-gateway
+	url = https://github.com/asidelnikoff/dnevnik-api-gateway.git
