@@ -1,0 +1,9 @@
+﻿services:
+  dnevnik.apigateway:
+    container_name: gateway
+    build:
+      context: ./api-gateway
+      dockerfile: ./src/Dnevnik.ApiGateway
+    ports:
+      - "5001:8080"
+  
