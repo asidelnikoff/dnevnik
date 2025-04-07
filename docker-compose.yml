@@ -113,6 +113,8 @@ services:
     build:
       context: ./schedule-ms
       dockerfile: ./Dockerfile
+      args:
+        BUILDPLATFORM: linux
     networks:
       - schedule_net
       - gateway_net
