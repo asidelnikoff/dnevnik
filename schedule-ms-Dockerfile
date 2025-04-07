@@ -15,7 +15,7 @@ RUN mkdir https \
     && dotnet user-secrets init -p TimeTable.csproj \
     && dotnet user-secrets -p TimeTable.csproj set "Kestrel:Certificates:Default:Password" "Pass1234"
 
-FROM base AS final
+FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TimeTable.dll"]
