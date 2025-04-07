@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR ./TimeTable
-COPY ["./TimeTable.csproj", "."]
+COPY ["/TimeTable/TimeTable.csproj", "."]
 RUN dotnet restore "TimeTable.csproj"
 COPY . .
 WORKDIR "/TimeTable"
