@@ -12,8 +12,8 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "TimeTable.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false 
 RUN mkdir https \
     && dotnet dev-certs https -ep "./https/aspnetapp.pfx" --trust -p "Pass1234" \
-    && dotnet user-secrets init -p .\TimeTable\TimeTable.csproj \
-    && dotnet user-secrets -p TimeTable\TimeTable.csproj set "Kestrel:Certificates:Default:Password" "Pass1234"
+    && dotnet user-secrets init -p TimeTable.csproj \
+    && dotnet user-secrets -p TimeTable.csproj set "Kestrel:Certificates:Default:Password" "Pass1234"
 
 FROM base AS final
 WORKDIR /app
