@@ -25,13 +25,12 @@ services:
   
   # Настройка микросервиса домашних заданий
   tasks-ms: # Микросервис домашних заданий
-    
     container_name: tasks-ms
     build: ./tasks-ms
     ports:
       - "8090:8090"
     volumes:
-      - ./tasks-ms/config:/etc/task
+      - ./tasks-ms-config/config:/etc/task
     networks:
       - tasks_net
       - kafka_net
@@ -40,8 +39,6 @@ services:
       - tasks-db
       - kafka
   tasks-db: # БД микросервиса домашних заданий
-    
-    container_name: postgres
     image: docker.io/bitnami/postgresql:16
     ports:
       - "5433:5432"
