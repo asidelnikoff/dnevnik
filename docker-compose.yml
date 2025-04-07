@@ -14,7 +14,6 @@ services:
   # Настройка Api Gateway
   dnevnik.apigateway:
     container_name: gateway
-    
     build:
       context: ./api-gateway
       dockerfile: ./src/Dnevnik.ApiGateway/Dockerfile
@@ -28,7 +27,7 @@ services:
     container_name: tasks-ms
     build: ./tasks-ms
     ports:
-      - "8090:8090"
+      - "5002:8090"
     volumes:
       - ./tasks-ms-config/config:/etc/task
     networks:
@@ -62,7 +61,7 @@ services:
     container_name: users-ms
     build: ./users-ms
     ports:
-      - "8000:8000"
+      - "5003:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://postgres:postgres@users-db:5432/user_api
     networks:
@@ -96,11 +95,12 @@ services:
   schedule-ms:
     container_name: schedule-ms
     ports:
-      - "8001:8001"
+      - "5004:8080"
     environment:
       - ASPNETCORE_HTTPS_PORTS=8001
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=./aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123
     stdin_open: true
     tty: true
     build:
