@@ -97,7 +97,6 @@ services:
   
   # Настройка микросервиса уроков
   schedule-ms:
-    
     container_name: schedule-ms
     ports:
       - "8001:8001"
@@ -105,16 +104,11 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8001
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-    volumes:
-      - ${APPDATA}/microsoft/UserSecrets/:/home/app/.microsoft/usersecrets
-      - ${USERPROFILE}/.aspnet/https/:/https/
     stdin_open: true
     tty: true
     build:
       context: ./schedule-ms
-      dockerfile: ./Dockerfile
-      args:
-        - BUILDPLATFORM=linux
+      dockerfile: ../schedule-ms-Dockerfile
     networks:
       - schedule_net
       - gateway_net
@@ -124,7 +118,6 @@ services:
       - kafka
   schedule-db:
     image: postgres:16-alpine
-    
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
