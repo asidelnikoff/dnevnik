@@ -97,6 +97,7 @@ services:
     container_name: schedule-ms
     ports:
       - "5005:8080"
+      - "5006:8001"
     environment:
       - ASPNETCORE_HTTPS_PORTS=8001
       - ASPNETCORE_ENVIRONMENT=Development
