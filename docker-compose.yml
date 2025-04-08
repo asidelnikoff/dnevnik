@@ -39,6 +39,7 @@ services:
       - kafka
   tasks-db: # БД микросервиса домашних заданий
     image: docker.io/bitnami/postgresql:16
+    user: root
     ports:
       - "5433:5432"
     volumes:
