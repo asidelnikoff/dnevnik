@@ -103,7 +103,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=./aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123
-      - ConnectionStrings__LessonDbContext=User ID=postgres;Password=postgres;Host=schedule-db;Port=5432;Database=postgres
+    volumes:
+      - ./schedule-ms-config:/app
     stdin_open: true
     tty: true
     build:
