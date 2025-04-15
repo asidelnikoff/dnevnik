@@ -24,6 +24,7 @@ services:
   
   # Настройка микросервиса домашних заданий
   tasks-ms: # Микросервис домашних заданий
+    restart: unless-stopped
     container_name: tasks-ms
     build: ./tasks-ms
     ports:
@@ -58,7 +59,6 @@ services:
   
   # Настройка микросервиса пользователей
   users-ms:
-    
     container_name: users-ms
     build: ./users-ms
     ports:
