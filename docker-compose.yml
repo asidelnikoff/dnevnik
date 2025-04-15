@@ -1,4 +1,13 @@
-﻿networks:
+﻿volumes:
+  users_pgdata:
+  tasks_pgdata:
+  schedule_pgdata:
+  kafka_data:
+  zk_data:
+  zk_data_log:
+  zk_logs:
+
+networks:
   users_net:
     driver: bridge
   tasks_net:
@@ -44,7 +53,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./tasks-ms/data/postgres:/bitnami/postgresql
+      - tasks_pgdata:/bitnami/postgresql
     environment:
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_PASSWORD=postgres
@@ -74,13 +83,12 @@ services:
       - kafka
   users-db:
     image: postgres:16-alpine
-    
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: user_api
     volumes:
-      - ./users-ms/pgdata:/var/lib/postgresql/data
+      - users_pgdata:/var/lib/postgresql/data
       - ./users-ms/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5434:5432
@@ -103,8 +111,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=./aspnetapp.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123
-    volumes:
-      - ./schedule-ms-config:/app
+      - ConnectionStrings__LessonDbContext=User ID=postgres;Password=postgres;Host=schedule-db;Port=5432;Database=postgres
     stdin_open: true
     tty: true
     build:
@@ -124,8 +131,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     volumes:
-      - ./schedule-ms/pgdata:/var/lib/postgresql/data
-      - ./schedule-ms/init.sql:/init.sql
+      - schedule_pgdata:/var/lib/postgresql/data
+      - ./schedule-ms/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5435:5432
     networks:
@@ -150,7 +157,7 @@ services:
       - 9093
       - 9092
     volumes:
-      - ./kafka/kafkadata:/kafka
+      - kafka_data:/kafka
     networks:
       - kafka_net    
   zookeeper:
@@ -158,8 +165,8 @@ services:
     ports:
       - 2181:2181
     volumes:
-      - ./kafka/zkdata:/data
-      - ./kafka/zkdatalog:/datalog
-      - ./kafka/zklogs:/logs
+      - zk_data:/data
+      - zk_data_log:/datalog
+      - zk_logs:/logs
     networks:
       - kafka_net
