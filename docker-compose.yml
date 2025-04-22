@@ -2,6 +2,7 @@
   users_pgdata:
   tasks_pgdata:
   schedule_pgdata:
+  journal_pgdata:
   kafka_data:
   zk_data:
   zk_data_log:
@@ -14,23 +15,25 @@ networks:
     driver: bridge
   schedule_net:
     driver: bridge
+  journal_net:
+    driver: bridge
   kafka_net:
     driver: bridge
   gateway_net:
     driver: bridge
 
 services:
-  # Настройка Api Gateway
-  dnevnik.apigateway:
-    container_name: gateway
-    build:
-      context: ./api-gateway
-      dockerfile: ./src/Dnevnik.ApiGateway/Dockerfile
-    ports:
-      - "5002:8080"
-    networks:
-      - gateway_net
-  
+#  # Настройка Api Gateway
+#  dnevnik.apigateway:
+#    container_name: gateway
+#    build:
+#      context: ./api-gateway
+#      dockerfile: ./src/Dnevnik.ApiGateway/Dockerfile
+#    ports:
+#      - "5002:8080"
+#    networks:
+#      - gateway_net
+#  
   # Настройка микросервиса домашних заданий
   tasks-ms: # Микросервис домашних заданий
     restart: unless-stopped
@@ -170,3 +173,26 @@ services:
       - zk_logs:/logs
     networks:
       - kafka_net
+  
+  journal-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5508:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - journal_net
+  dnevnik.journal:
+    build:
+      context: .
+      dockerfile: src/Dnevnik.Journal/Dockerfile
+    ports:
+      - 5507:8080
+    environment:
+      - ConnectionStrings__JournalConnection=Host=journal-db;Port=5432;Database=postgres;Username=postgres;Password=postgres;MaxPoolSize=500;MinPoolSize=250;ConnectionIdleLifetime=60;Timeout=30;ConnectionPruningInterval=10;
+    networks:
+      - journal_net
