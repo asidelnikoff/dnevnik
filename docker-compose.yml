@@ -183,7 +183,7 @@ services:
     ports:
       - 5508:5432
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - journal_pgdata:/var/lib/postgresql/data
     networks:
       - journal_net
   dnevnik.journal:
