@@ -23,6 +23,30 @@ networks:
     driver: bridge
 
 services:
+  journal-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5508:5432
+    volumes:
+      - journal_pgdata:/var/lib/postgresql/data
+    networks:
+      - journal_net
+  dnevnik.journal:
+    build:
+      context: ./journal-ms/src
+      dockerfile: Dnevnik.Journal/Dockerfile
+    ports:
+      - 5507:8080
+    environment:
+      - ConnectionStrings__JournalConnection=Host=journal-db;Port=5432;Database=postgres;Username=postgres;Password=postgres;MaxPoolSize=500;MinPoolSize=250;ConnectionIdleLifetime=60;Timeout=30;ConnectionPruningInterval=10;
+    networks:
+      - journal_net
+    depends_on:
+      - journal-db
 #  # Настройка Api Gateway
 #  dnevnik.apigateway:
 #    container_name: gateway
@@ -173,26 +197,3 @@ services:
       - zk_logs:/logs
     networks:
       - kafka_net
-  
-  journal-db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - 5508:5432
-    volumes:
-      - journal_pgdata:/var/lib/postgresql/data
-    networks:
-      - journal_net
-  dnevnik.journal:
-    build:
-      context: ./journal-ms/src
-      dockerfile: Dnevnik.Journal/Dockerfile
-    ports:
-      - 5507:8080
-    environment:
-      - ConnectionStrings__JournalConnection=Host=journal-db;Port=5432;Database=postgres;Username=postgres;Password=postgres;MaxPoolSize=500;MinPoolSize=250;ConnectionIdleLifetime=60;Timeout=30;ConnectionPruningInterval=10;
-    networks:
-      - journal_net
