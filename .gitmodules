@@ -10,3 +10,6 @@
 [submodule "users-ms"]
 	path = users-ms
 	url = https://github.com/alenapoliakova/user-api.git
+[submodule "journal-ms"]
+	path = journal-ms
+	url = https://github.com/asidelnikoff/dnevnik-journal.git
