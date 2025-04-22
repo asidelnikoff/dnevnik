@@ -188,8 +188,8 @@ services:
       - journal_net
   dnevnik.journal:
     build:
-      context: .
-      dockerfile: src/Dnevnik.Journal/Dockerfile
+      context: ./journal-ms/src
+      dockerfile: Dnevnik.Journal/Dockerfile
     ports:
       - 5507:8080
     environment:
