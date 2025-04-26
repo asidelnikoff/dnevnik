@@ -142,7 +142,7 @@ services:
     stdin_open: true
     tty: true
     build:
-      context: ./schedule-ms
+      context: ./schedule-ms-copy
       dockerfile: ../schedule-ms-Dockerfile
     networks:
       - schedule_net
