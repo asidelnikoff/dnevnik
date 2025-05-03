@@ -3,7 +3,7 @@ volumes:
   tasks_pgdata:
   schedule_pgdata:
   journal_pgdata:
-  kafka_data:
+  kafka1_data:
   kafka_controller_data:
 
 networks:
@@ -178,7 +178,6 @@ services:
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
     volumes:
       - kafka_controller_data:/bitnami/kafka/data
-      - .config/kafka-controler:/bitnami/kafka/config
     healthcheck:
       test: ["CMD", "kafka-broker-api.sh", "--bootstrap-server", "kafka-controller:9093", "--command", "cluster-id"]
       interval: 30s
@@ -203,7 +202,6 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-controller:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     volumes:
-      - kafka_data:/bitnami/kafka/data
-      - .config/kafka:/bitnami/kafka/config
+      - kafka1_data:/bitnami/kafka/data
     networks:
       - kafka_net
